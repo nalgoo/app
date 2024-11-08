@@ -1,0 +1,37 @@
+{
+    "name": "nalgoo/app",
+    "description": "description",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Nalgoo Team",
+            "email": "everyone@nalgoo.com"
+        }
+    ],
+    "require": {
+        "php": "8.3.*",
+        "psr/container": "*",
+        "psr/log": "*",
+        "monolog/monolog": "~3.7",
+        "slim/slim": "~4.14",
+        "slim/psr7": "~1.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nalgoo\\App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Nalgoo\\App\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": false
+        }
+    }
+}
