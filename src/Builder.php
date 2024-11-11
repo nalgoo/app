@@ -19,6 +19,7 @@ use Slim\Interfaces\AdvancedCallableResolverInterface;
 use Slim\Interfaces\RouteCollectorInterface;
 use Slim\Interfaces\RouteResolverInterface;
 use Slim\Interfaces\ServerRequestCreatorInterface;
+use Slim\Middleware\ErrorMiddleware;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\ResponseEmitter;
 use Slim\Routing\RouteCollector;
@@ -69,6 +70,21 @@ class Builder
 				return $handler;
 			},
 
+			ErrorMiddleware::class => function (ContainerInterface $container) {
+				$errorMiddleware = new ErrorMiddleware(
+		            $container->get(AdvancedCallableResolverInterface::class),
+					$container->get(ResponseFactoryInterface::class),
+		            true, // todo
+		            true,
+		            true,
+		            $container->get(LoggerInterface::class),
+				);
+
+				$errorMiddleware->setDefaultErrorHandler($container->get(HttpErrorHandler::class));
+
+				return $errorMiddleware;
+			},
+
 			SlimApp::class => function (ContainerInterface $container) {
 				// Instantiate the app
 				$app = AppFactory::create(
@@ -81,17 +97,7 @@ class Builder
 				$app->add(new ReverseProxyMiddleware());
 				$app->addBodyParsingMiddleware();
 				$app->addRoutingMiddleware();
-
-				$isProduction = getenv('ENV') !== 'development'; // todo, clean
-				$displayErrorDetails = !$isProduction;
-
-				$errorMiddleware = $app->addErrorMiddleware(
-					$displayErrorDetails,
-					true,
-					true,
-					$container->get(LoggerInterface::class),
-				);
-				$errorMiddleware->setDefaultErrorHandler($container->get(HttpErrorHandler::class));
+				$app->add($container->get(ErrorMiddleware::class));
 
 				return $app;
 			},

@@ -6,17 +6,21 @@ use Nalgoo\App\Interfaces\ResponseEmitterInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\ErrorHandlerInterface;
 use Slim\Interfaces\ServerRequestCreatorInterface;
-use Slim\ResponseEmitter;
 
-readonly class App
+class App
 {
 	public function __construct(
-		private \Slim\App $slimApp,
-		private ServerRequestCreatorInterface $requestCreator,
-		private ResponseEmitterInterface $responseEmitter,
-		private ErrorHandlerInterface $errorHandler,
+		readonly private \Slim\App $slimApp,
+		readonly private ServerRequestCreatorInterface $requestCreator,
+		readonly private ResponseEmitterInterface $responseEmitter,
+		readonly private ErrorHandlerInterface $errorHandler,
 		private bool $displayErrorDetails = false,
 	) {
+	}
+
+	public function setDisplayErrorDetails(bool $displayErrorDetails): void
+	{
+		$this->displayErrorDetails = $displayErrorDetails;
 	}
 
 	public function register(callable $callable): void
