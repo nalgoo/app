@@ -94,11 +94,6 @@ class Builder
 					$container->get(RouteCollectorInterface::class),
 					$container->get(RouteResolverInterface::class),
 				);
-				$app->add(new ReverseProxyMiddleware());
-				$app->addBodyParsingMiddleware();
-				$app->addRoutingMiddleware();
-				$app->add($container->get(ErrorMiddleware::class));
-
 				return $app;
 			},
 

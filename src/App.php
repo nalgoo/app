@@ -3,9 +3,11 @@
 namespace Nalgoo\App;
 
 use Nalgoo\App\Interfaces\ResponseEmitterInterface;
+use Nalgoo\App\Middleware\ReverseProxyMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\ErrorHandlerInterface;
 use Slim\Interfaces\ServerRequestCreatorInterface;
+use Slim\Middleware\ErrorMiddleware;
 
 class App
 {
@@ -26,6 +28,17 @@ class App
 	public function register(callable $callable): void
 	{
 		call_user_func($callable, $this->slimApp);
+	}
+
+	/**
+	 * This should be called *AFTER* adding custom middleware, to be on top of the stack
+	 */
+	public function registerCoreMiddleware(): void
+	{
+		$this->slimApp->add(new ReverseProxyMiddleware());
+		$this->slimApp->addBodyParsingMiddleware();
+		$this->slimApp->addRoutingMiddleware();
+		$this->slimApp->add($this->slimApp->getContainer()->get(ErrorMiddleware::class));
 	}
 
 	public function run(): void

@@ -17,5 +17,7 @@ $container = $containerBuilder->build();
 
 $app = $container->get(App::class);
 $app->register($routes);
+$app->register($middleware); // should be before registerCoreMiddleware()
+$app->registerCoreMiddleware();
 $app->run();
 ```
