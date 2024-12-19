@@ -57,7 +57,7 @@ class App
 
 		if ($error) {
 			$exception = new \ErrorException($error['message'], $error['type'], 1, $error['file'], $error['line']);
-			$response = $this->errorHandler->__invoke($request, $exception, $this->displayErrorDetails, false, false);
+			$response = $this->errorHandler->__invoke($request, $exception, $this->displayErrorDetails, true, true);
 			$this->responseEmitter->emit($response);
 		}
 	}
