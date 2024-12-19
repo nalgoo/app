@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "8.3.*",
+        "php": "8.3.* || 8.4.*",
         "psr/container": "*",
         "psr/log": "*",
         "monolog/monolog": "~3.7",
