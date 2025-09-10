@@ -1,8 +1,7 @@
 {
     "name": "nalgoo/app",
-    "description": "description",
     "minimum-stability": "stable",
-    "license": "proprietary",
+    "license": "MIT",
     "authors": [
         {
             "name": "Nalgoo Team",
